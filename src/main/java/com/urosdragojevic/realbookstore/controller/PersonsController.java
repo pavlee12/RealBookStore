@@ -5,7 +5,7 @@ import com.urosdragojevic.realbookstore.domain.Person;
 import com.urosdragojevic.realbookstore.domain.User;
 import com.urosdragojevic.realbookstore.repository.PersonRepository;
 import com.urosdragojevic.realbookstore.repository.UserRepository;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +34,7 @@ public class PersonsController {
     }
 
     @GetMapping("/persons/{id}")
+    @PreAuthorize("hasAuthority('VIEW_PERSON')")
     public String person(@PathVariable int id, Model model) {
         model.addAttribute("person", personRepository.get("" + id));
         return "person";
