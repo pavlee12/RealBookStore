@@ -1,5 +1,5 @@
 package com.urosdragojevic.realbookstore.repository;
-
+import com.urosdragojevic.realbookstore.audit.AuditLogger;
 import com.urosdragojevic.realbookstore.domain.Comment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,9 @@ public class CommentRepository {
             statement.execute(query);
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING: insert comment '" + comment + "'");
         }
+        AuditLogger.getAuditLogger(CommentRepository.class).audit("inserted comment: '" + comment + "'");
     }
 
     public List<Comment> getAll(int bookId) {
@@ -46,6 +48,7 @@ public class CommentRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING: getting comment list for book with id " + bookId);
         }
         return commentList;
     }

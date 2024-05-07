@@ -36,6 +36,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("ERROR: getting book list");
         }
         return genreList;
     }
@@ -51,6 +52,7 @@ public class GenreRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING: getting genres for book with id " + bookId);
         }
         return genreList;
     }

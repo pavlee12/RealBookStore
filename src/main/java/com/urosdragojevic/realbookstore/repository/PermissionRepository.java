@@ -37,6 +37,7 @@ public class PermissionRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING: listing users with id " + roleId);
         }
         return permissions;
     }

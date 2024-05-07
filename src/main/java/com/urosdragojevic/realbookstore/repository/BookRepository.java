@@ -37,6 +37,7 @@ public class BookRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.error("ERROR with listing books!");
         }
         return bookList;
     }
@@ -68,10 +69,10 @@ public class BookRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING with search for book with id " + bookId);
         }
         return null;
     }
-
     public long create(NewBook book, List<Genre> genresToInsert) {
         String query = "INSERT INTO books(title, description, author) VALUES(?, ?, ?)";
         long id = 0;
@@ -95,13 +96,18 @@ public class BookRepository {
                         statement2.executeUpdate();
                     } catch (SQLException e) {
                         e.printStackTrace();
+                        LOG.warn("WARNING with inserting book : (" + book.getTitle() + "," + book.getDescription() + ", " + book.getAuthor() + ").");
+
                     }
                 });
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING with inserting book : ( " + book.getTitle() + ", " + book.getDescription() + ", " + book.getAuthor() + ").");
         }
-        return id;
+        AuditLogger.getAuditLogger(BookRepository.class).audit("inserted book : (" + book.getTitle() + ", " +
+                book.getDescription() + ", " + book.getAuthor() + ").");
+            return id;
     }
 
     public void delete(int bookId) {
@@ -118,7 +124,9 @@ public class BookRepository {
             statement.executeUpdate(query4);
         } catch (SQLException e) {
             e.printStackTrace();
+            LOG.warn("WARNING: deleting book with id " + bookId);
         }
+        AuditLogger.getAuditLogger(BookRepository.class).audit("Deleted book with id " + bookId);
     }
 
     private Book createBookFromResultSet(ResultSet rs) throws SQLException {
